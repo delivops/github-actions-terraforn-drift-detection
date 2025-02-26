@@ -61,10 +61,10 @@ runs:
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
         if [ $exitcode -eq 1 ]; then
-          echo "Terraform Plan Failed for environment ${inputs.environment}!"
+          echo "Terraform Plan Failed for environment ${{ inputs.environment }}!"
           exit 1
         else 
-          echo "Terraform Plan successful for environment ${inputs.environment}!"
+          echo "Terraform Plan successful for environment ${{ inputs.environment }}!"
           exit 0
         fi
         
