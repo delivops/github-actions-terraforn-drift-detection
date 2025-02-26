@@ -29,38 +29,42 @@ inputs:
     required: true    
 
 runs:
-  using: 'composite'
-  defaults:
-    run:
-      shell: bash
-      working-directory: ${{ inputs.working_directory }}    
+  using: 'composite' 
   env:
     ARM_SKIP_PROVIDER_REGISTRATION: true
     AWS_REGION: ${{ inputs.aws_region }}
     AWS_ROLE: ${{ inputs.aws_role }}
-  outputs:
-      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
   steps:
     - name: Checkout the repository to the GitHub Actions runner
       uses: actions/checkout@v4
-
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_wrapper: false
-
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      
     - name: Configure AWS credentials via OIDC
       id: auth
       uses: aws-actions/configure-aws-credentials@v4
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}      
       with:
         aws-region: ${{ inputs.aws_region }}
         role-to-assume: "arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role }}"
 
     - name: Terraform Init
       run: terraform init
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}      
 
     - name: Terraform Plan
       id: tf-plan
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}      
       run: |
         export exitcode=0
         terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
@@ -76,12 +80,16 @@ runs:
         
     - name: Publish Terraform Plan
       uses: actions/upload-artifact@v4
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}      
       with:
         name: tfplan
         path: tfplan
         
     - name: Create String Output
       id: tf-plan-string
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}      
       run: |
         TERRAFORM_PLAN=$(terraform show -no-color tfplan)
         delimiter="$(openssl rand -hex 8)"
@@ -95,6 +103,8 @@ runs:
         echo "${delimiter}" >> $GITHUB_OUTPUT
         
     - name: Publish Terraform Plan to Task Summary
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}    
       env:
         SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
       run: |
@@ -105,6 +115,8 @@ runs:
       id: report
       if: steps.tf-plan.outputs.exitcode == 2
       uses: actions/github-script@v7
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}      
       env:
         SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
       with:
@@ -148,6 +160,8 @@ runs:
     # If changes aren't detected, close only the relevant environment's issue
     - name: Close Drift Issue if No Changes
       if: steps.tf-plan.outputs.exitcode == 0
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}      
       uses: actions/github-script@v7
       with:
         github-token: ${{ inputs.github_token }}
@@ -179,12 +193,16 @@ runs:
     - name: Slack Notification of drift
       if: steps.tf-plan.outputs.exitcode == 2
       uses: rtCamp/action-slack-notify@v2.3.0
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}      
       env:
         SLACK_COLOR: "#ff0000"
         SLACK_MESSAGE: ":warning: *Terraform Drift Detected* :warning:"
         SLACK_WEBHOOK: ${{ inputs.slack_webhook }}
         
     - name: Publish Failed Drift Report
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}    
       if: failure()
       uses: actions/github-script@v7
       with:
@@ -223,6 +241,8 @@ runs:
           }
           
     - name: Slack Notification of failure
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}    
       if: failure()
       uses: rtCamp/action-slack-notify@v2.3.0
       env:
