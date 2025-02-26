@@ -1,5 +1,5 @@
 name: 'Delivops Terraform Drift Detection Workflow'
-description: 'This GitHub Action runs Terraform plan on the specified environment, and check for drifts.'
+description: 'This GitHub Action runs Terraform plan on the specified environment, and checks for drifts.'
 author: 'delivops'
 branding: 
   icon: 'check-square'
@@ -26,14 +26,10 @@ inputs:
     required: true
   github_token:
     description: 'GitHub token'
-    required: true    
+    required: true   
 
 runs:
   using: 'composite' 
-  env:
-    ARM_SKIP_PROVIDER_REGISTRATION: true
-    AWS_REGION: ${{ inputs.aws_region }}
-    AWS_ROLE: ${{ inputs.aws_role }}
   steps:
     - name: Checkout the repository to the GitHub Actions runner
       uses: actions/checkout@v4
