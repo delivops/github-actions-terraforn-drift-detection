@@ -1,4 +1,6 @@
 name: Terraform Drift Detection Workflow
+description: 'This GitHub Action runs Terraform plan on the specified environment, and check for drifts.'
+author: 'delivops'
 
 on:
   workflow_dispatch:
