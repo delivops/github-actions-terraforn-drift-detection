@@ -104,7 +104,6 @@ runs:
       id: report
       if: steps.tf-plan.outputs.exitcode == 2
       uses: actions/github-script@v7
-      shell: bash
       env:
         SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
       with:
@@ -149,11 +148,10 @@ runs:
     # If changes aren't detected, close only the relevant environment's issue
     - name: Close Drift Issue if No Changes
       if: steps.tf-plan.outputs.exitcode == 0
-      shell: bash
       uses: actions/github-script@v7
       with:
         github-token: ${{ inputs.github_token }}
-        working-directory: ${{ inputs.working_directory }}      
+        #working-directory: ${{ inputs.working_directory }}      
         script: |
           const title = 'Drift Detection In Global';
           const creator = 'github-actions[bot]'
@@ -177,12 +175,10 @@ runs:
               state: 'closed'
             });
           }
-             
 
     - name: Slack Notification of drift
       if: steps.tf-plan.outputs.exitcode == 2
       uses: rtCamp/action-slack-notify@v2.3.0
-      shell: bash
       with:
         working-directory: ${{ inputs.working_directory }}      
       env:
@@ -195,7 +191,7 @@ runs:
       if: failure()
       uses: actions/github-script@v7
       with:
-        working-directory: ${{ inputs.working_directory }}    
+        #working-directory: ${{ inputs.working_directory }}    
         github-token: ${{ inputs.github_token }}
         script: |
           const title = 'Drift Detection in ${{ inputs.environment }}';
@@ -231,9 +227,7 @@ runs:
           }
           
     - name: Slack Notification of failure
-      shell: bash
-      with:
-        working-directory: ${{ inputs.working_directory }}    
+      shell: bash  
       if: failure()
       uses: rtCamp/action-slack-notify@v2.3.0
       env:
