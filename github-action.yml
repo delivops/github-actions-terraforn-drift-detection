@@ -1,42 +1,40 @@
-name: Terraform Drift Detection Workflow
+name: 'Delivops Terraform Drift Detection Workflow'
 description: 'This GitHub Action runs Terraform plan on the specified environment, and check for drifts.'
 author: 'delivops'
 branding: 
   icon: 'check-square’ (You could choose from number of options available)
   color: 'green'
 
-on:
-  workflow_dispatch:
-    inputs:
-      working_directory:
-        description: 'The working directory'
-        required: true
-        default: 'env/global'
-      slack_webhook:
-        description: 'Slack webhook URL'
-        required: true
-      environment:
-        description: 'The environment (e.g., dev, prod)'
-        required: true
-      aws_region:
-        description: 'AWS region'
-        required: true
-      aws_role:
-        description: 'AWS role to assume'
-        required: true
+inputs:
+  working_directory:
+    description: 'The working directory'
+    required: true
+    default: 'env/global'
+  slack_webhook:
+    description: 'Slack webhook URL'
+    required: true
+  environment:
+    description: 'The environment (e.g., dev, prod)'
+    required: true
+  aws_region:
+    description: 'AWS region'
+    required: true
+  aws_role:
+    description: 'AWS role to assume'
+    required: true
 
 runs:
-  using: composite
-  defaults:
-    run:
-      shell: bash
-      working-directory: ${{ inputs.working_directory }}    
-  env:
-    ARM_SKIP_PROVIDER_REGISTRATION: true
-    AWS_REGION: ${{ inputs.aws_region }}
-    AWS_ROLE: ${{ inputs.aws_role }}
-  outputs:
-      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+  using: 'composite'
+  # defaults:
+  #   run:
+  #     shell: bash
+  #     working-directory: ${{ inputs.working_directory }}    
+  # env:
+  #   ARM_SKIP_PROVIDER_REGISTRATION: true
+  #   AWS_REGION: ${{ inputs.aws_region }}
+  #   AWS_ROLE: ${{ inputs.aws_role }}
+  # outputs:
+  #     tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
   steps:
     - name: Checkout the repository to the GitHub Actions runner
       uses: actions/checkout@v4
