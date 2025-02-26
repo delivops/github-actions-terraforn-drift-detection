@@ -22,6 +22,11 @@ inputs:
   aws_role:
     description: 'AWS role to assume'
     required: true
+  aws_account_id:
+    required: true
+  github_token:
+    description: 'GitHub token'
+    required: true    
 
 runs:
   using: 'composite'
@@ -49,7 +54,7 @@ runs:
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ inputs.aws_region }}
-        role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.aws_role }}"
+        role-to-assume: "arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role }}"
 
     - name: Terraform Init
       run: terraform init
@@ -103,7 +108,7 @@ runs:
       env:
         SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.github_token }}
         script: |
           const body = `${process.env.SUMMARY}`;
           const title = 'Drift Detection in ${{ inputs.environment }}';
@@ -145,7 +150,7 @@ runs:
       if: steps.tf-plan.outputs.exitcode == 0
       uses: actions/github-script@v7
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.github_token }}
         script: |
           const title = 'Drift Detection In Global';
           const creator = 'github-actions[bot]'
@@ -183,7 +188,7 @@ runs:
       if: failure()
       uses: actions/github-script@v7
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.github_token }}
         script: |
           const title = 'Drift Detection in ${{ inputs.environment }}';
           const failedBody = 'Terraform Drift Execution Failed';
