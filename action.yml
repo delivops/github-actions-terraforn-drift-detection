@@ -33,7 +33,6 @@ runs:
   steps:
     - name: Checkout the repository to the GitHub Actions runner
       uses: actions/checkout@v4
-      shell: bash
       with:
         working-directory: ${{ inputs.working_directory }}
       
@@ -42,13 +41,10 @@ runs:
       with:
         working-directory: ${{ inputs.working_directory }}
         terraform_wrapper: false
-      shell: bash
-
       
     - name: Configure AWS credentials via OIDC
       id: auth
       uses: aws-actions/configure-aws-credentials@v4
-      shell: bash  
       with:
         working-directory: ${{ inputs.working_directory }}    
         aws-region: ${{ inputs.aws_region }}
@@ -56,15 +52,11 @@ runs:
 
     - name: Terraform Init
       run: terraform init
-      shell: bash
-      with: 
-        working-directory: ${{ inputs.working_directory }}      
+      shell: bash   
 
     - name: Terraform Plan
       id: tf-plan
-      shell: bash
-      with: 
-        working-directory: ${{ inputs.working_directory }}       
+      shell: bash     
       run: |
         export exitcode=0
         terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
@@ -80,7 +72,6 @@ runs:
         
     - name: Publish Terraform Plan
       uses: actions/upload-artifact@v4
-      shell: bash
       with:
         name: tfplan
         path: tfplan
@@ -88,9 +79,7 @@ runs:
         
     - name: Create String Output
       id: tf-plan-string
-      shell: bash
-      with:
-        working-directory: ${{ inputs.working_directory }}      
+      shell: bash   
       run: |
         TERRAFORM_PLAN=$(terraform show -no-color tfplan)
         delimiter="$(openssl rand -hex 8)"
@@ -105,8 +94,6 @@ runs:
         
     - name: Publish Terraform Plan to Task Summary
       shell: bash
-      with:
-        working-directory: ${{ inputs.working_directory }}    
       env:
         SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
       run: |
