@@ -20,7 +20,7 @@ on:
         description: 'AWS role to assume'
         required: true
 
-jobs:
+jobs: 
   terraform-drift:
     name: 'Terraform Drift Detection'
     runs-on: ubuntu-latest
