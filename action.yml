@@ -30,16 +30,16 @@ inputs:
 
 runs:
   using: 'composite'
-  # defaults:
-  #   run:
-  #     shell: bash
-  #     working-directory: ${{ inputs.working_directory }}    
-  # env:
-  #   ARM_SKIP_PROVIDER_REGISTRATION: true
-  #   AWS_REGION: ${{ inputs.aws_region }}
-  #   AWS_ROLE: ${{ inputs.aws_role }}
-  # outputs:
-  #     tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+  defaults:
+    run:
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}    
+  env:
+    ARM_SKIP_PROVIDER_REGISTRATION: true
+    AWS_REGION: ${{ inputs.aws_region }}
+    AWS_ROLE: ${{ inputs.aws_role }}
+  outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
   steps:
     - name: Checkout the repository to the GitHub Actions runner
       uses: actions/checkout@v4
