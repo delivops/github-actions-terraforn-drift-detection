@@ -2,7 +2,7 @@ name: 'Delivops Terraform Drift Detection Workflow'
 description: 'This GitHub Action runs Terraform plan on the specified environment, and check for drifts.'
 author: 'delivops'
 branding: 
-  icon: 'check-square’ (You could choose from number of options available)
+  icon: 'check-square'
   color: 'green'
 
 inputs:
