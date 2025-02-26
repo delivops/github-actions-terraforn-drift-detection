@@ -178,16 +178,13 @@ runs:
 
     - name: Slack Notification of drift
       if: steps.tf-plan.outputs.exitcode == 2
-      uses: rtCamp/action-slack-notify@v2.3.0
-      with:
-        working-directory: ${{ inputs.working_directory }}      
+      uses: rtCamp/action-slack-notify@v2.3.0     
       env:
         SLACK_COLOR: "#ff0000"
         SLACK_MESSAGE: ":warning: *Terraform Drift Detected* :warning:"
         SLACK_WEBHOOK: ${{ inputs.slack_webhook }}
         
     - name: Publish Failed Drift Report
-      shell: bash
       if: failure()
       uses: actions/github-script@v7
       with:
@@ -227,7 +224,6 @@ runs:
           }
           
     - name: Slack Notification of failure
-      shell: bash  
       if: failure()
       uses: rtCamp/action-slack-notify@v2.3.0
       env:
