@@ -14,7 +14,7 @@ inputs:
     description: 'Slack webhook URL'
     required: true
   environment:
-    description: 'The environment (e.g., dev, prod)'
+    description: 'The environment (e.g., dev, prod)' 
     required: true
   aws_region:
     description: 'AWS region'
