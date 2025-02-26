@@ -33,13 +33,10 @@ runs:
   steps:
     - name: Checkout the repository to the GitHub Actions runner
       uses: actions/checkout@v4
-      with:
-        working-directory: ${{ inputs.working_directory }}
       
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
       with:
-        working-directory: ${{ inputs.working_directory }}
         terraform_wrapper: false
       
     - name: Configure AWS credentials via OIDC
