@@ -9,7 +9,6 @@ inputs:
   working_directory:
     description: 'The working directory'
     required: true
-    default: 'env/global'
   slack_webhook:
     description: 'Slack webhook URL'
     required: true
@@ -109,7 +108,7 @@ runs:
         github-token: ${{ inputs.github_token }}
         script: |
           const body = `${process.env.SUMMARY}`;
-          const title = 'Drift Detection in ${{ inputs.environment }}';
+          const title = 'Drift Detection In ${{ inputs.environment }}';
           const creator = 'github-actions[bot]'
 
           // Look to see if there is an existing drift issue
@@ -149,9 +148,8 @@ runs:
       uses: actions/github-script@v7
       with:
         github-token: ${{ inputs.github_token }}
-        #working-directory: ${{ inputs.working_directory }}      
         script: |
-          const title = 'Drift Detection In Global';
+          const title = 'Drift Detection In ${{ inputs.environment }}';
           const creator = 'github-actions[bot]'
 
           // Look for an existing drift issue for this environment
@@ -186,10 +184,9 @@ runs:
       if: failure()
       uses: actions/github-script@v7
       with:
-        #working-directory: ${{ inputs.working_directory }}    
         github-token: ${{ inputs.github_token }}
         script: |
-          const title = 'Drift Detection in ${{ inputs.environment }}';
+          const title = 'Drift Detection In ${{ inputs.environment }}';
           const failedBody = 'Terraform Drift Execution Failed';
           const creator = 'github-actions[bot]';
 
