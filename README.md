@@ -1,4 +1,4 @@
-![image info](logo.jpeg)
+![image info](logo-small.jpeg)
 
 # github-actions-terraforn-drift-detection
 
