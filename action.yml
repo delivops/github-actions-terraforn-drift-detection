@@ -75,10 +75,11 @@ runs:
         
     - name: Create String Output
       id: tf-plan-string
-      shell: bash   
+      shell: bash 
+      working-directory: ${{ inputs.working_directory }}
       run: |
         TERRAFORM_PLAN=$(terraform show -no-color tfplan)
-        
+
         delimiter="$(openssl rand -hex 8)"
         echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
         echo "## Terraform Plan Output for environment ${{ inputs.environment }}" >> $GITHUB_OUTPUT
