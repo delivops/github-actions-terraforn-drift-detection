@@ -75,22 +75,19 @@ runs:
         
     - name: Create String Output
       id: tf-plan-string
-      working-directory: ${{ inputs.working_directory }}
       shell: bash   
       run: |
         TERRAFORM_PLAN=$(terraform show -no-color tfplan)
-        delimiter="$(openssl rand -hex 8)"
         
-        {
-          echo "summary<<${delimiter}"
-          echo "## Terraform Plan Output for environment ${{ inputs.environment }}"
-          echo "<details><summary>Click to expand</summary>"
-          echo '```terraform'
-          printf "%s\n" "$TERRAFORM_PLAN"
-          echo '```'
-          echo "</details>"
-          echo "${delimiter}"
-        } >> $GITHUB_OUTPUT
+        delimiter="$(openssl rand -hex 8)"
+        echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+        echo "## Terraform Plan Output for environment ${{ inputs.environment }}" >> $GITHUB_OUTPUT
+        echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+        echo '```terraform' >> $GITHUB_OUTPUT
+        echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+        echo '```' >> $GITHUB_OUTPUT
+        echo "</details>" >> $GITHUB_OUTPUT
+        echo "${delimiter}" >> $GITHUB_OUTPUT
         
     - name: Publish Terraform Plan to Task Summary
       shell: bash
