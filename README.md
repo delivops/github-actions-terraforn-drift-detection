@@ -25,9 +25,13 @@ This GitHub Action follows these steps to perform Terraform Drift Detection:
 ## Features
 
 ✔️ Automated Drift Detection: Ensures infrastructure matches the Terraform configuration.
+
 ✔️ GitHub Issue Management: Opens/updates/auto-closes issues based on drift status.
+
 ✔️ Slack Notifications: Notifies the team about detected drifts and failures.
+
 ✔️ Secure AWS Access: Uses IAM role assumption for secure authentication.
+
 ✔️ Customizable Inputs: Supports different environments and AWS accounts.
 
 ## Inputs
