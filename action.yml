@@ -46,7 +46,7 @@ runs:
         role-to-assume: "arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role }}"
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init || terraform init -upgrade
       shell: bash  
       working-directory: ${{ inputs.working_directory }}
 
