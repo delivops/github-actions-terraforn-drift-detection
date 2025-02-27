@@ -73,7 +73,6 @@ runs:
       with:
         name: tfplan
         path: tfplan
-        working-directory: ${{ inputs.working_directory }}      
         
     - name: Create String Output
       id: tf-plan-string
@@ -107,7 +106,6 @@ runs:
       env:
         SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
       with:
-        working-directory: ${{ inputs.working_directory }}      
         github-token: ${{ inputs.github_token }}
         script: |
           const body = `${process.env.SUMMARY}`;
